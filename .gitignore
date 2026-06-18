@@ -1,0 +1,21 @@
+# --- Virtual Environments ---
+.venv/
+venv/
+ENV/
+
+# --- Private API Keys and Secrets ---
+.env
+
+# --- Local Vector Database (FAISS Index) ---
+vectorstore/
+
+# --- Python System Garbage & Caches ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# --- IDE Settings (Optional but Recommended) ---
+.vscode/
+.idea/
+.DS_Store
