@@ -75,15 +75,15 @@ rag_chain = create_retrieval_chain(
     qa_chain
 )
 
-
-
-while True:
-    question = input("\nYou: ")
-
-    if question.lower() == "exit":
-        break
-
-    result = rag_chain.invoke(
+if __name__ == "__main__":
+    
+    while True:
+        question = input("\nYou: ")
+        
+        if question.lower() == "exit":
+            break
+        
+        result = rag_chain.invoke(
         {
             "input": question,
             "chat_history": chat_history
