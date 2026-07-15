@@ -1,6 +1,8 @@
 from dotenv import load_dotenv
+import os
 
-from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
@@ -30,9 +32,16 @@ load_dotenv()
 
 #LOad Gemini
 
-llm = ChatGoogleGenerativeAI(
-    model = "gemini-2.5-flash",
-    temperature = 0
+# llm = ChatGoogleGenerativeAI(
+#     model = "gemini-2.5-flash",
+#     temperature = 0
+# )
+
+llm = ChatOpenAI(
+    model = "deepseek/deepseek-chat",
+    temperature=0,
+    api_key = os.getenv("OPENROUTER_API_KEY"),
+    base_url = "https://openrouter.ai/api/v1"
 )
 
 #Load FAISS :
