@@ -1,0 +1,21 @@
+[project]
+name = "pdfbuddy"
+version = "0.1.0"
+description = "PDFBuddy: a PDF question-answering app backed by LangChain and FAISS"
+requires-python = ">=3.14"
+dependencies = [
+  "streamlit>=1.49.0",
+  "python-dotenv>=1.2.2",
+  "langchain-openai>=1.3.3",
+  "langchain-huggingface>=1.2.2",
+  "langchain-community>=0.4.2",
+  "langchain-classic>=1.0.8",
+  "langchain-core>=1.4.7",
+  "langchain-text-splitters>=1.1.2",
+  "faiss-cpu>=1.14.3",
+  "pypdf>=6.13.2",
+  "sentence-transformers>=5.6.0",
+]
+
+[tool.uv]
+package = false
