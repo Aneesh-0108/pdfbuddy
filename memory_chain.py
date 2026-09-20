@@ -3,8 +3,6 @@ import os
 
 # from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
 
 from langchain_classic.chains import (
       create_history_aware_retriever,
@@ -26,8 +24,6 @@ from prompts import(
 
 
 
-chat_history = []
-
 load_dotenv()
 
 #LOad Gemini
@@ -44,74 +40,26 @@ llm = ChatOpenAI(
     base_url = "https://openrouter.ai/api/v1"
 )
 
-#Load FAISS :
-
-embeddings = HuggingFaceEmbeddings(
-    model_name = "sentence-transformers/all-MiniLM-L6-v2")
-
-db = FAISS.load_local(
-    "vectorstore",
-    embeddings,
-    allow_dangerous_deserialization=True
-
-)
-
-# fetches top 4 results 
-retriever = db.as_retriever(
-    search_kwargs={"k":4}
-)
-
-
-#history-aware -retriever for more accuracy:
-
-history_retriever = create_history_aware_retriever(
-    llm,
-    retriever,
-    contextualize_q_prompt
-
-)
-
-
-qa_chain = create_stuff_documents_chain(
-    llm,
-    qa_prompt
-
-)
-
-
-rag_chain = create_retrieval_chain(
-    history_retriever,
-    qa_chain
-)
-
-if __name__ == "__main__":
-    
-    while True:
-        question = input("\nYou: ")
-        
-        if question.lower() == "exit":
-            break
-        
-        result = rag_chain.invoke(
-        {
-            "input": question,
-            "chat_history": chat_history
-        }
+def create_rag_chain(retriever):
+    history_retriever = create_history_aware_retriever(
+        llm,
+        retriever,
+        contextualize_q_prompt,
     )
 
-    answer = result["answer"]
-
-    print("\nBuddy:",answer)
-
-    #saving user message and ai response to the context i.e to chat_history=[]
-
-    chat_history.append(
-        HumanMessage(content=question)
+    qa_chain = create_stuff_documents_chain(
+        llm,
+        qa_prompt,
     )
 
-    chat_history.append(
-        AIMessage(content=answer)
+    return create_retrieval_chain(
+        history_retriever,
+        qa_chain,
     )
+
+
+def create_retriever(vectorstore, k=4):
+    return vectorstore.as_retriever(search_kwargs={"k": k})
 
 
 
